@@ -1,11 +1,6 @@
 package com.vsevolodvishnevsky.testvkapp.base;
 
 import android.arch.lifecycle.ViewModel;
-import android.content.Context;
-import android.databinding.ObservableField;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.support.annotation.Nullable;
 
 import io.reactivex.disposables.CompositeDisposable;
 

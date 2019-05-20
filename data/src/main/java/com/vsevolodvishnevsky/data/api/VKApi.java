@@ -9,9 +9,9 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface VKApi {
-    @GET("method/users.get")
+    @GET("users.get")
     Observable<GetUserResponse> getUsersById(@Query("user_ids") String userIds, @Query(Constants.ACCESS_TOKEN) String token, @Query("v") String version);
 
-    @GET("method/friends.get")
+    @GET("friends.get")
     Observable<GetFriendsResponse> getFriendsIds(@Query("user_id") String userId, @Query(Constants.ACCESS_TOKEN) String token, @Query("v") String version, @Query("count") int count);
 }

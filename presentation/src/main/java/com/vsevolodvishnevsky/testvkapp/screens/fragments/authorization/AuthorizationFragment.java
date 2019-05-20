@@ -26,7 +26,14 @@ import com.vsevolodvishnevsky.testvkapp.databinding.FragmentAuthorizationBinding
  * A simple {@link Fragment} subclass.
  */
 public class AuthorizationFragment extends BaseMVVMFragment<FragmentAuthorizationBinding, AuthorizationViewModel> {
-    public static final String IS_FIRST_AUTHORIZATION = "isFirstAuthorization";
+    public static final String IS_FIRST_AUTHORIZATION_KEY = "isFirstAuthorization";
+    public static final String RESPONSE_TYPE = "token";
+    public static final String SCOPE = "friends";
+    public static final String DISPLAY = "mobile";
+    public static final String REDIRECT_URL = "https://oauth.vk.com/blank.html";
+    public static final String AUTHORIZATION_URL = "https://oauth.vk.com/authorize";
+    private Button authButton;
+    private WebView webView;
 
     public AuthorizationFragment() {
         // Required empty public constructor
@@ -34,7 +41,7 @@ public class AuthorizationFragment extends BaseMVVMFragment<FragmentAuthorizatio
 
     public static AuthorizationFragment getInstance(boolean isFirstAuthorization) {
         Bundle bundle = new Bundle();
-        bundle.putBoolean(IS_FIRST_AUTHORIZATION, isFirstAuthorization);
+        bundle.putBoolean(IS_FIRST_AUTHORIZATION_KEY, isFirstAuthorization);
         AuthorizationFragment fragment = new AuthorizationFragment();
         fragment.setArguments(bundle);
         return fragment;
@@ -55,23 +62,23 @@ public class AuthorizationFragment extends BaseMVVMFragment<FragmentAuthorizatio
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        boolean isFirstAuthorization = getArguments().getBoolean(IS_FIRST_AUTHORIZATION);
+        boolean isFirstAuthorization = getArguments().getBoolean(IS_FIRST_AUTHORIZATION_KEY);
         View root = super.onCreateView(inflater, container, savedInstanceState);
-        WebView webView = root.findViewById(R.id.web_view);
-        Button authButton = root.findViewById(R.id.auth_button);
-        authButton.setVisibility(isFirstAuthorization ? View.VISIBLE : View.GONE);
+        webView = root.findViewById(R.id.web_view);
+        authButton = root.findViewById(R.id.auth_button);
         if (isFirstAuthorization) {
             authButton.setOnClickListener(v -> {
                 authButton.setVisibility(View.GONE);
-                authorize(webView);
+                authorize();
             });
         } else {
-            authorize(webView);
+            authorize();
         }
         return root;
     }
 
-    private void authorize(WebView webView) {
+    private void authorize() {
+        authButton.setVisibility(View.GONE);
         webView.setVisibility(View.VISIBLE);
         webView.setWebViewClient(new WebViewClient() {
 
@@ -84,20 +91,20 @@ public class AuthorizationFragment extends BaseMVVMFragment<FragmentAuthorizatio
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (url.startsWith(Constants.CALLBACK_URL) & (!url.contains("error"))) {
+                if (url.startsWith(REDIRECT_URL) & (!url.contains("error"))) {
                     viewModel.saveAuthorizationData(url);
                     return true;
                 }
                 return false;
             }
         });
-        String url = Uri.parse("https://oauth.vk.com/authorize")
+        String url = Uri.parse(AUTHORIZATION_URL)
                 .buildUpon()
-                .appendQueryParameter("client_id", "6988108")
-                .appendQueryParameter("redirect_uri", "https://oauth.vk.com/blank.html")
-                .appendQueryParameter("display", "mobile")
-                .appendQueryParameter("scope", "friends")
-                .appendQueryParameter("response_type", "token")
+                .appendQueryParameter("client_id", String.valueOf(getResources().getInteger(R.integer.com_vk_sdk_AppId)))
+                .appendQueryParameter("redirect_uri", REDIRECT_URL)
+                .appendQueryParameter("display", DISPLAY)
+                .appendQueryParameter("scope", SCOPE)
+                .appendQueryParameter("response_type", RESPONSE_TYPE)
                 .appendQueryParameter("v", Constants.VERSION)
                 .build().toString();
         webView.loadUrl(url);

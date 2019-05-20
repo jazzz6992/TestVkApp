@@ -2,7 +2,6 @@ package com.vsevolodvishnevsky.testvkapp.injection;
 
 
 import android.content.Context;
-import android.support.v4.app.FragmentManager;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.vsevolodvishnevsky.data.api.VKApi;
@@ -45,7 +44,7 @@ public class AppModule {
     @Provides
     @Singleton
     public Retrofit getRetrofit() {
-        return new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).addCallAdapterFactory(RxJava2CallAdapterFactory.create()).baseUrl("https://api.vk.com/").build();
+        return new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).addCallAdapterFactory(RxJava2CallAdapterFactory.create()).baseUrl("https://api.vk.com/method/").build();
     }
 
     @Provides

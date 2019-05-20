@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">TestVkApp</string>
-    <string name="auth">Auth</string>
-    <integer name="com_vk_sdk_AppId">6988108</integer>
+    <string name="app_name" translatable="false">TestVkApp</string>
     <string name="authorize">Authorize</string>
 </resources>

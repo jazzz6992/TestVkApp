@@ -14,8 +14,6 @@ import com.vsevolodvishnevsky.testvkapp.app.App;
 import com.vsevolodvishnevsky.testvkapp.base.BaseViewModel;
 import com.vsevolodvishnevsky.testvkapp.util.TokenValidator;
 
-import java.util.Date;
-
 import javax.inject.Inject;
 
 public class MainViewModel extends BaseViewModel {
@@ -35,14 +33,14 @@ public class MainViewModel extends BaseViewModel {
 
     private UserAdapter userAdapter = new UserAdapter();
 
-   public void loadData() {
-       if (!TokenValidator.isTokenExpired(sharedPreferences)) {
-           getUserInfo();
-           getFriends();
-       } else {
-           tokenExpiredCallback.onTokenExpired();
-       }
-   }
+    public void loadData() {
+        if (TokenValidator.isTokenValid(sharedPreferences)) {
+            getUserInfo();
+            getFriends();
+        } else {
+            tokenExpiredCallback.onTokenExpired();
+        }
+    }
 
     @Override
     public void createInject() {
@@ -93,6 +91,7 @@ public class MainViewModel extends BaseViewModel {
     protected void onCleared() {
         super.onCleared();
         context = null;
+        tokenExpiredCallback = null;
     }
 
 

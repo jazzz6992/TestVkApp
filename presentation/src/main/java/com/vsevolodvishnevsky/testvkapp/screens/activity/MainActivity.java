@@ -3,8 +3,6 @@ package com.vsevolodvishnevsky.testvkapp.screens.activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
@@ -20,40 +18,41 @@ import com.vsevolodvishnevsky.testvkapp.util.TokenValidator;
 public class MainActivity extends AppCompatActivity implements AuthorizationCallback, TokenExpiredCallback {
 
 
-    private FragmentManager fragmentManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        Fragment fragment;
-        fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if (sharedPreferences.getString(Constants.ACCESS_TOKEN, null) != null) {
-            if (!TokenValidator.isTokenExpired(sharedPreferences)) {
-                fragment = MainFragment.getInstance();
+            if (TokenValidator.isTokenValid(sharedPreferences)) {
+                navigateToMainFragment();
             } else {
-                fragment = AuthorizationFragment.getInstance(false);
+                navigateToAuthorizationFragment(false);
             }
         } else {
-            fragment = AuthorizationFragment.getInstance(true);
+            navigateToAuthorizationFragment(true);
         }
-        fragmentTransaction.replace(R.id.container, fragment);
+    }
+
+    private void navigateToAuthorizationFragment(boolean isFirstAuthorization) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.container, AuthorizationFragment.getInstance(isFirstAuthorization));
         fragmentTransaction.commit();
     }
 
-    @Override
-    public void onAuthorized() {
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+    private void navigateToMainFragment() {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container, MainFragment.getInstance());
         fragmentTransaction.commit();
     }
 
     @Override
+    public void onAuthorized() {
+        navigateToMainFragment();
+    }
+
+    @Override
     public void onTokenExpired() {
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.container, AuthorizationFragment.getInstance(false));
-        fragmentTransaction.commit();
+        navigateToAuthorizationFragment(false);
     }
 }

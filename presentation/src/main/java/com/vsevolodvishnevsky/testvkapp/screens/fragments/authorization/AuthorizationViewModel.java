@@ -5,17 +5,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.util.Log;
-import android.view.View;
 
 import com.vsevolodvishnevsky.domain.constants.Constants;
 import com.vsevolodvishnevsky.testvkapp.app.App;
 import com.vsevolodvishnevsky.testvkapp.base.BaseViewModel;
-import com.vsevolodvishnevsky.testvkapp.injection.AppComponent;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.inject.Inject;
 
