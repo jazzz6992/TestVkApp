@@ -1,0 +1,65 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+
+buildscript {
+
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.4.1'
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+    }
+}
+
+ext {
+    compileSdkVersion = 28
+    targetSdkVersion = 28
+    minSdkVersion = 16
+    buildToolsVersion = '28.0.3'
+    androidSupportVersion = '28.0.0'
+    rxJavaVersion = '2.2.8'
+    rxAndroidVersion = '2.1.1'
+    gsonVersion = '2.8.5'
+    archComponentVersion = '1.1.1'
+    daggerVersion = '2.22.1'
+    javaInjectVersion = '1'
+    retrofitVersion = '2.5.0'
+    retrofitRxAdapterVersion = '1.0.0'
+    glideVersion = '4.9.0'
+    constraintLayoutVersion = '1.1.0'
+    rxPermissionVersion = '0.9.5@aar'
+
+    dependencies = [
+            supportAppcompat       : "com.android.support:appcompat-v7:$androidSupportVersion",
+            supportV4              : "com.android.support:support-v4:$androidSupportVersion",
+            supportDesign          : "com.android.support:design:$androidSupportVersion",
+            cardView               : "com.android.support:cardview-v7:$androidSupportVersion",
+            constraintLayout       : "com.android.support.constraint:constraint-layout:$constraintLayoutVersion",
+            rxJava                 : "io.reactivex.rxjava2:rxjava:$rxJavaVersion",
+            rxAndroid              : "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion",
+            gson                   : "com.google.code.gson:gson:$gsonVersion",
+            archComponentsExtention: "android.arch.lifecycle:extensions:$archComponentVersion",
+            archComponentCompiler  : "android.arch.lifecycle:compiler:$archComponentVersion",
+            dagger                 : "com.google.dagger:dagger:$daggerVersion",
+            daggerCompiler         : "com.google.dagger:dagger-compiler:$daggerVersion",
+            javaxInject            : "javax.inject:javax.inject:$javaInjectVersion",
+            retrofit               : "com.squareup.retrofit2:retrofit:$retrofitVersion",
+            retrofitGsonConverter  : "com.squareup.retrofit2:converter-gson:$retrofitVersion",
+            retrofitRxAdapter      : "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$retrofitRxAdapterVersion",
+            glide                  : "com.github.bumptech.glide:glide:$glideVersion",
+            glideCompiler          : "com.github.bumptech.glide:compiler:$glideVersion",
+    ]
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
