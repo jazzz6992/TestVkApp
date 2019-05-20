@@ -10,13 +10,15 @@ import com.vsevolodvishnevsky.domain.constants.Constants;
 import com.vsevolodvishnevsky.domain.entity.User;
 import com.vsevolodvishnevsky.domain.interactors.GetFriendsIdsUseCase;
 import com.vsevolodvishnevsky.domain.interactors.GetUsersByIdUseCase;
+import com.vsevolodvishnevsky.testvkapp.R;
 import com.vsevolodvishnevsky.testvkapp.app.App;
 import com.vsevolodvishnevsky.testvkapp.base.BaseViewModel;
+import com.vsevolodvishnevsky.testvkapp.screens.routers.MainRouter;
 import com.vsevolodvishnevsky.testvkapp.util.TokenValidator;
 
 import javax.inject.Inject;
 
-public class MainViewModel extends BaseViewModel {
+public class MainViewModel extends BaseViewModel<MainRouter> {
     @Inject
     public GetUsersByIdUseCase getUsersByIdUseCase;
     @Inject
@@ -24,8 +26,6 @@ public class MainViewModel extends BaseViewModel {
     @SuppressLint("StaticFieldLeak")
     @Inject
     public Context context;
-
-    private TokenExpiredCallback tokenExpiredCallback;
 
     public ObservableField<User> owner = new ObservableField<>();
 
@@ -38,7 +38,7 @@ public class MainViewModel extends BaseViewModel {
             getUserInfo();
             getFriends();
         } else {
-            tokenExpiredCallback.onTokenExpired();
+            router.navigateToAuthorizationFragment(false);
         }
     }
 
@@ -51,7 +51,7 @@ public class MainViewModel extends BaseViewModel {
     private void getUserInfo() {
         compositeDisposable.add(getUsersByIdUseCase.execute(sharedPreferences.getString(Constants.USER_ID, null),
                 sharedPreferences.getString(Constants.ACCESS_TOKEN, null),
-                Constants.VERSION).subscribe(users -> {
+                context.getResources().getString(R.string.version)).subscribe(users -> {
             owner.set(users.get(0));
             owner.notifyChange();
         }));
@@ -60,7 +60,7 @@ public class MainViewModel extends BaseViewModel {
     private void getFriends() {
         compositeDisposable.add(getFriendsIdsUseCase.execute(sharedPreferences.getString(Constants.USER_ID, null),
                 sharedPreferences.getString(Constants.ACCESS_TOKEN, null),
-                Constants.VERSION, 5).subscribe(ids -> {
+                context.getResources().getString(R.string.version), 5).subscribe(ids -> {
             StringBuilder stringBuilder = new StringBuilder();
             for (int id : ids) {
                 stringBuilder.append(id).append(",");
@@ -72,7 +72,7 @@ public class MainViewModel extends BaseViewModel {
                 String userIds = stringBuilder.toString();
                 compositeDisposable.add(getUsersByIdUseCase.execute(userIds,
                         sharedPreferences.getString(Constants.ACCESS_TOKEN, null),
-                        Constants.VERSION).subscribe(users -> {
+                        context.getResources().getString(R.string.version)).subscribe(users -> {
                     userAdapter.setItems(users);
                 }));
             }
@@ -83,16 +83,10 @@ public class MainViewModel extends BaseViewModel {
         return userAdapter;
     }
 
-    public void setTokenExpiredCallback(TokenExpiredCallback tokenExpiredCallback) {
-        this.tokenExpiredCallback = tokenExpiredCallback;
-    }
-
     @Override
     protected void onCleared() {
-        super.onCleared();
         context = null;
-        tokenExpiredCallback = null;
+        sharedPreferences = null;
+        super.onCleared();
     }
-
-
 }

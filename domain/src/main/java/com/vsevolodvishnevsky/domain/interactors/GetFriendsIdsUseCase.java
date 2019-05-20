@@ -18,8 +18,8 @@ public class GetFriendsIdsUseCase extends BaseUseCase {
         this.dataRepository = dataRepository;
     }
 
-    public Observable<List<Integer>> execute(String id, String token, String appVersion, int coun) {
-        return dataRepository.getFriendsIds(id, token, appVersion, coun)
+    public Observable<List<Integer>> execute(String id, String token, String appVersion, int count) {
+        return dataRepository.getFriendsIds(id, token, appVersion, count)
                 .subscribeOn(threadExecution)
                 .observeOn(postExecutionThread);
     }

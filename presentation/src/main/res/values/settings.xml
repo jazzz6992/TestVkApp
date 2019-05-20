@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="redirect_url" translatable="false">https://oauth.vk.com/blank.html</string>
+    <string name="scope" translatable="false">friends</string>
+    <string name="display" translatable="false">mobile</string>
+    <string name="response_type" translatable="false">token</string>
+    <string name="version" translatable="false">5.95</string>
+    <string name="authorization_url" translatable="false">https://oauth.vk.com/authorize</string>
+    <integer name="appId">6988108</integer>
+</resources>

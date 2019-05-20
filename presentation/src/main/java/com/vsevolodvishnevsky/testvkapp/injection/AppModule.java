@@ -5,7 +5,6 @@ import android.content.Context;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.vsevolodvishnevsky.data.api.VKApi;
-import com.vsevolodvishnevsky.data.api.VKService;
 import com.vsevolodvishnevsky.data.repository.DataRepositoryImpl;
 import com.vsevolodvishnevsky.domain.executor.PostExecutionThread;
 import com.vsevolodvishnevsky.domain.repository.DataRepository;
@@ -55,8 +54,8 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public DataRepository getDataRepository(VKService vkService) {
-        return new DataRepositoryImpl(vkService);
+    public DataRepository getDataRepository(VKApi vkApi) {
+        return new DataRepositoryImpl(vkApi);
     }
 
 }

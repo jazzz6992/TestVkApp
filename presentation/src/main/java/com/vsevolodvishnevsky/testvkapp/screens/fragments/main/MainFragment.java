@@ -15,12 +15,13 @@ import android.view.ViewGroup;
 import com.vsevolodvishnevsky.testvkapp.R;
 import com.vsevolodvishnevsky.testvkapp.base.BaseMVVMFragment;
 import com.vsevolodvishnevsky.testvkapp.databinding.FragmentMainBinding;
+import com.vsevolodvishnevsky.testvkapp.screens.routers.MainRouter;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainFragment extends BaseMVVMFragment<FragmentMainBinding, MainViewModel> {
+public class MainFragment extends BaseMVVMFragment<FragmentMainBinding, MainViewModel, MainRouter> {
 
 
     public MainFragment() {
@@ -34,10 +35,12 @@ public class MainFragment extends BaseMVVMFragment<FragmentMainBinding, MainView
 
     @Override
     public MainViewModel provideViewModel() {
-        MainViewModel mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        mainViewModel.setTokenExpiredCallback((TokenExpiredCallback) getActivity());
-        mainViewModel.loadData();
-        return mainViewModel;
+        return ViewModelProviders.of(this).get(MainViewModel.class);
+    }
+
+    @Override
+    public MainRouter provideRouter() {
+        return new MainRouter(getActivity());
     }
 
     public static MainFragment getInstance() {
@@ -50,6 +53,7 @@ public class MainFragment extends BaseMVVMFragment<FragmentMainBinding, MainView
         View view = super.onCreateView(inflater, container, savedInstanceState);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        viewModel.loadData();
         return view;
     }
 }

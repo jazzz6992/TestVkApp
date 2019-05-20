@@ -8,14 +8,14 @@ public class GetFriendsResponse {
 
     @SerializedName("response")
     @Expose
-    private Response response;
+    private GetFriendsResponsePayload getFriendsResponsePayload;
 
-    public Response getResponse() {
-        return response;
+    public GetFriendsResponsePayload getGetFriendsResponsePayload() {
+        return getFriendsResponsePayload;
     }
 
-    public void setResponse(Response response) {
-        this.response = response;
+    public void setGetFriendsResponsePayload(GetFriendsResponsePayload getFriendsResponsePayload) {
+        this.getFriendsResponsePayload = getFriendsResponsePayload;
     }
 
 }
