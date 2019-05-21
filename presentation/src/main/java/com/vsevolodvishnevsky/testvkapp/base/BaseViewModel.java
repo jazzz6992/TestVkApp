@@ -25,6 +25,10 @@ public abstract class BaseViewModel<R extends BaseRouter> extends ViewModel {
         createInject();
     }
 
+    public void handleException(Throwable t) {
+
+    }
+
 
     public void onResume() {
 

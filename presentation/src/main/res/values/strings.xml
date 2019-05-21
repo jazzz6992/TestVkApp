@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name" translatable="false">TestVkApp</string>
     <string name="authorize">Authorize</string>
+    <string name="no_internet">There is connection problems. Check your internet connection</string>
 </resources>

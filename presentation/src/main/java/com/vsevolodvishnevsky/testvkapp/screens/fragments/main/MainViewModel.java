@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.databinding.ObservableField;
 import android.preference.PreferenceManager;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.vsevolodvishnevsky.domain.constants.Constants;
 import com.vsevolodvishnevsky.domain.entity.User;
@@ -15,6 +17,8 @@ import com.vsevolodvishnevsky.testvkapp.app.App;
 import com.vsevolodvishnevsky.testvkapp.base.BaseViewModel;
 import com.vsevolodvishnevsky.testvkapp.screens.routers.MainRouter;
 import com.vsevolodvishnevsky.testvkapp.util.TokenValidator;
+
+import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -54,7 +58,7 @@ public class MainViewModel extends BaseViewModel<MainRouter> {
                 context.getResources().getString(R.string.version)).subscribe(users -> {
             owner.set(users.get(0));
             owner.notifyChange();
-        }));
+        }, this::handleException));
     }
 
     private void getFriends() {
@@ -74,13 +78,21 @@ public class MainViewModel extends BaseViewModel<MainRouter> {
                         sharedPreferences.getString(Constants.ACCESS_TOKEN, null),
                         context.getResources().getString(R.string.version)).subscribe(users -> {
                     userAdapter.setItems(users);
-                }));
+                }, this::handleException));
             }
-        }));
+        }, this::handleException));
     }
 
     public UserAdapter getUserAdapter() {
         return userAdapter;
+    }
+
+    @Override
+    public void handleException(Throwable t) {
+        Log.e(Constants.LOG_TAG, t.getLocalizedMessage());
+        if (t instanceof IOException) {
+            Toast.makeText(context, R.string.no_internet, Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

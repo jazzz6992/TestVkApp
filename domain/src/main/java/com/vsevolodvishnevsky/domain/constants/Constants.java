@@ -5,4 +5,5 @@ public class Constants {
     public static final String EXPIRES_IN = "expires_in";
     public static final String USER_ID = "user_id";
     public static final String EXPIRES_AT = "expires_at";
+    public static final String LOG_TAG = "log_tag";
 }
