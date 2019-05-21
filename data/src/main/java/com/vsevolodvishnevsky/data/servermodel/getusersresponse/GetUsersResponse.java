@@ -1,12 +1,12 @@
 
-package com.vsevolodvishnevsky.data.server_model.get_user_response;
+package com.vsevolodvishnevsky.data.servermodel.getusersresponse;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class GetUserResponse {
+public class GetUsersResponse {
 
     @SerializedName("response")
     @Expose
@@ -19,5 +19,4 @@ public class GetUserResponse {
     public void setUsers(List<User> user) {
         this.users = user;
     }
-
 }

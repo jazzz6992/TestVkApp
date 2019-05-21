@@ -5,8 +5,15 @@ import android.support.v7.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.subjects.PublishSubject;
+
 public abstract class BaseAdapter<Model, ViewModel extends BaseItemViewModel<Model>> extends RecyclerView.Adapter<BaseViewHolder<Model, ViewModel, ?>> {
     protected List<Model> items = new ArrayList<>();
+    private PublishSubject<Model> clickSubject = PublishSubject.create();
+
+    public PublishSubject<Model> getClickSubject() {
+        return clickSubject;
+    }
 
     @Override
     public void onBindViewHolder(BaseViewHolder<Model, ViewModel, ?> holder, int position) {
@@ -29,4 +36,20 @@ public abstract class BaseAdapter<Model, ViewModel extends BaseItemViewModel<Mod
         return items.size();
     }
 
+    @Override
+    public void onViewAttachedToWindow(BaseViewHolder<Model, ViewModel, ?> holder) {
+        super.onViewAttachedToWindow(holder);
+        holder.itemView.setOnClickListener(v -> {
+            int pos = holder.getAdapterPosition();
+            if (items.size() > pos) {
+                clickSubject.onNext(items.get(pos));
+            }
+        });
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(BaseViewHolder<Model, ViewModel, ?> holder) {
+        super.onViewDetachedFromWindow(holder);
+        holder.itemView.setOnClickListener(null);
+    }
 }

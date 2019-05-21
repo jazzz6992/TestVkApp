@@ -1,5 +1,5 @@
 
-package com.vsevolodvishnevsky.data.server_model.get_friends_response;
+package com.vsevolodvishnevsky.data.servermodel.getfriendsresponse;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -30,5 +30,4 @@ public class GetFriendsResponsePayload {
     public void setItems(List<Integer> items) {
         this.items = items;
     }
-
 }

@@ -6,9 +6,7 @@ import android.content.Context;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.vsevolodvishnevsky.data.api.VKApi;
 import com.vsevolodvishnevsky.data.repository.DataRepositoryImpl;
-import com.vsevolodvishnevsky.domain.executor.PostExecutionThread;
 import com.vsevolodvishnevsky.domain.repository.DataRepository;
-import com.vsevolodvishnevsky.testvkapp.executor.UIThread;
 
 import javax.inject.Singleton;
 
@@ -34,11 +32,6 @@ public class AppModule {
         return context;
     }
 
-    @Provides
-    @Singleton
-    public PostExecutionThread getUiThread() {
-        return new UIThread();
-    }
 
     @Provides
     @Singleton
@@ -57,5 +50,4 @@ public class AppModule {
     public DataRepository getDataRepository(VKApi vkApi) {
         return new DataRepositoryImpl(vkApi);
     }
-
 }

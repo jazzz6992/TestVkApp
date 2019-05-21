@@ -1,5 +1,5 @@
 
-package com.vsevolodvishnevsky.data.server_model.get_user_response;
+package com.vsevolodvishnevsky.data.servermodel.getusersresponse;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

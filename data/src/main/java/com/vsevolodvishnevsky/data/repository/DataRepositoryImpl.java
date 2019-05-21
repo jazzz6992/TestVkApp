@@ -1,7 +1,7 @@
 package com.vsevolodvishnevsky.data.repository;
 
 import com.vsevolodvishnevsky.data.api.VKApi;
-import com.vsevolodvishnevsky.data.server_model.get_user_response.GetUserResponse;
+import com.vsevolodvishnevsky.data.servermodel.getusersresponse.GetUsersResponse;
 import com.vsevolodvishnevsky.domain.entity.User;
 import com.vsevolodvishnevsky.domain.repository.DataRepository;
 
@@ -30,10 +30,10 @@ public class DataRepositoryImpl implements DataRepository {
         return vkApi.getFriendsIds(id, token, appVersion, count).map(getFriendsResponse -> getFriendsResponse.getGetFriendsResponsePayload().getItems());
     }
 
-    private List<com.vsevolodvishnevsky.domain.entity.User> mapUsers(GetUserResponse getUserResponse) {
-        List<com.vsevolodvishnevsky.domain.entity.User> users = new ArrayList<>();
-        List<com.vsevolodvishnevsky.data.server_model.get_user_response.User> responseUsers = getUserResponse.getUsers();
-        for (com.vsevolodvishnevsky.data.server_model.get_user_response.User r : responseUsers) {
+    private List<User> mapUsers(GetUsersResponse getUsersResponse) {
+        List<User> users = new ArrayList<>();
+        List<com.vsevolodvishnevsky.data.servermodel.getusersresponse.User> responseUsers = getUsersResponse.getUsers();
+        for (com.vsevolodvishnevsky.data.servermodel.getusersresponse.User r : responseUsers) {
             com.vsevolodvishnevsky.domain.entity.User user = new com.vsevolodvishnevsky.domain.entity.User();
             user.setId(r.getId());
             user.setFirstName(r.getFirstName());
