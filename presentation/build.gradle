@@ -36,14 +36,11 @@ dependencies {
     implementation dependancy.rxAndroid
     implementation dependancy.archComponentsExtention
     implementation dependancy.constraintLayout
-    implementation 'com.android.support:support-v4:28.0.0'
-    implementation 'android.arch.lifecycle:extensions:1.1.1'
     annotationProcessor dependancy.archComponentCompiler
     implementation dependancy.dagger
     annotationProcessor dependancy.daggerCompiler
     implementation dependancy.cardView
     implementation dependancy.glide
     annotationProcessor dependancy.glideCompiler
-    implementation 'android.arch.navigation:navigation-fragment:1.0.0'
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation dependancy.recyclerview
 }
