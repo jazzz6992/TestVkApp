@@ -45,8 +45,12 @@ public class AuthorizationViewModel extends BaseViewModel<MainRouter> {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            if (url.startsWith(context.getResources().getString(R.string.redirect_url)) & (!url.contains("error"))) {
+            if (url.startsWith(context.getResources().getString(R.string.redirect_url))
+                    && (!url.contains(Constants.ERROR) && !url.contains(Constants.CANCEL))) {
                 saveAuthorizationData(url);
+                return true;
+            } else if (url.contains(Constants.ERROR) || url.contains(Constants.CANCEL)) {
+                loading.set(false);
                 return true;
             }
             return false;
