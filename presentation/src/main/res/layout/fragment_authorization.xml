@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:onClick="@{() -> viewModel.authorize()}"
             android:text="@string/authorize"
-            android:visibility="@{viewModel.loading ? View.GONE : View.VISIBLE}"
+            android:visibility="@{viewModel.isAuthorizationInProgress ? View.GONE : View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -33,13 +33,13 @@
             android:id="@+id/web_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{viewModel.loading ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.isAuthorizationInProgress ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:load_url="@{viewModel.getObservableUrl()}"
-            app:set_client="@{viewModel.getWebViewClient()}">
+            app:load_url="@{viewModel.observableUrl}"
+            app:init="@{viewModel.webViewClient}">
         </WebView>
 
 

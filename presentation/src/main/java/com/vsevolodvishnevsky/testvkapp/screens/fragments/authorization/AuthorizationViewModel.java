@@ -33,7 +33,7 @@ public class AuthorizationViewModel extends BaseViewModel<MainRouter> {
 
 
     private ObservableField<String> observableUrl = new ObservableField<>();
-    private final ObservableBoolean loading = new ObservableBoolean(false);
+    private final ObservableBoolean isAuthorizationInProgress = new ObservableBoolean(false);
     private WebViewClient webViewClient = new WebViewClient() {
 
         @TargetApi(Build.VERSION_CODES.N)
@@ -45,12 +45,11 @@ public class AuthorizationViewModel extends BaseViewModel<MainRouter> {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            if (url.startsWith(context.getResources().getString(R.string.redirect_url))
-                    && (!url.contains(Constants.ERROR) && !url.contains(Constants.CANCEL))) {
-                saveAuthorizationData(url);
+            if (url.contains(Constants.ERROR) || url.contains(Constants.CANCEL)) {
+                isAuthorizationInProgress.set(false);
                 return true;
-            } else if (url.contains(Constants.ERROR) || url.contains(Constants.CANCEL)) {
-                loading.set(false);
+            } else if (url.startsWith(context.getResources().getString(R.string.redirect_url))) {
+                saveAuthorizationData(url);
                 return true;
             }
             return false;
@@ -70,8 +69,8 @@ public class AuthorizationViewModel extends BaseViewModel<MainRouter> {
         return webViewClient;
     }
 
-    public ObservableBoolean getLoading() {
-        return loading;
+    public ObservableBoolean getIsAuthorizationInProgress() {
+        return isAuthorizationInProgress;
     }
 
     private void saveAuthorizationData(String url) {
@@ -99,7 +98,7 @@ public class AuthorizationViewModel extends BaseViewModel<MainRouter> {
                 .appendQueryParameter("v", resources.getString(R.string.version))
                 .build().toString();
         observableUrl.set(url);
-        loading.set(true);
+        isAuthorizationInProgress.set(true);
     }
 
     @Override

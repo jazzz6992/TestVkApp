@@ -19,8 +19,9 @@ public class BindingAdapters {
         }
     }
 
-    @BindingAdapter("set_client")
-    public static void setClient(WebView webView, WebViewClient webViewClient) {
+    @BindingAdapter("init")
+    public static void init(WebView webView, WebViewClient webViewClient) {
         webView.setWebViewClient(webViewClient);
+        webView.getSettings().setJavaScriptEnabled(true);
     }
 }
