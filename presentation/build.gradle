@@ -36,7 +36,6 @@ dependencies {
     implementation dependancy.rxAndroid
     implementation dependancy.archComponentsExtention
     implementation dependancy.constraintLayout
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     annotationProcessor dependancy.archComponentCompiler
     implementation dependancy.dagger
     annotationProcessor dependancy.daggerCompiler
