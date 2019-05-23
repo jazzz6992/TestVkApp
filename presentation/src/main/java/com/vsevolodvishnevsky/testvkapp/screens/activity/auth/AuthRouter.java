@@ -14,5 +14,6 @@ public class AuthRouter extends BaseRouter {
     public void navigateToMainActivity() {
         Intent intent = MainActivity.createIntent(getActivity());
         getActivity().startActivity(intent);
+        getActivity().finish();
     }
 }
