@@ -30,10 +30,6 @@ public class AuthorizationViewModel extends BaseViewModel<AuthRouter> {
     @Inject
     public Context context;
 
-    public AuthorizationViewModel() {
-        System.out.println();
-    }
-
     private ObservableField<String> observableUrl = new ObservableField<>();
     private final ObservableBoolean isAuthorizationInProgress = new ObservableBoolean(false);
     private WebViewClient webViewClient = new WebViewClient() {
