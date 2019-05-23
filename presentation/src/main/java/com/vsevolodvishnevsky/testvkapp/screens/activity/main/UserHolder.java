@@ -1,4 +1,4 @@
-package com.vsevolodvishnevsky.testvkapp.screens.fragments.main;
+package com.vsevolodvishnevsky.testvkapp.screens.activity.main;
 
 import com.vsevolodvishnevsky.domain.entity.User;
 import com.vsevolodvishnevsky.testvkapp.base.BaseViewHolder;

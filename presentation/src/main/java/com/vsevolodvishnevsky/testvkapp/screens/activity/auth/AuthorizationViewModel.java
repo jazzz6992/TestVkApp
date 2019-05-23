@@ -1,4 +1,4 @@
-package com.vsevolodvishnevsky.testvkapp.screens.fragments.authorization;
+package com.vsevolodvishnevsky.testvkapp.screens.activity.auth;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -18,19 +18,21 @@ import com.vsevolodvishnevsky.domain.constants.Constants;
 import com.vsevolodvishnevsky.testvkapp.R;
 import com.vsevolodvishnevsky.testvkapp.app.App;
 import com.vsevolodvishnevsky.testvkapp.base.BaseViewModel;
-import com.vsevolodvishnevsky.testvkapp.screens.routers.MainRouter;
 
 import java.util.Date;
 
 import javax.inject.Inject;
 
-public class AuthorizationViewModel extends BaseViewModel<MainRouter> {
+public class AuthorizationViewModel extends BaseViewModel<AuthRouter> {
 
 
     @SuppressLint("StaticFieldLeak")
     @Inject
     public Context context;
 
+    public AuthorizationViewModel() {
+        System.out.println();
+    }
 
     private ObservableField<String> observableUrl = new ObservableField<>();
     private final ObservableBoolean isAuthorizationInProgress = new ObservableBoolean(false);
@@ -48,6 +50,9 @@ public class AuthorizationViewModel extends BaseViewModel<MainRouter> {
             if (url.contains(Constants.ERROR) || url.contains(Constants.CANCEL)) {
                 isAuthorizationInProgress.set(false);
                 return true;
+            } else if (url.contains(Constants.LOGOUT)) {
+                isAuthorizationInProgress.set(false);
+                return false;
             } else if (url.startsWith(context.getResources().getString(R.string.redirect_url))) {
                 saveAuthorizationData(url);
                 return true;
@@ -83,7 +88,7 @@ public class AuthorizationViewModel extends BaseViewModel<MainRouter> {
                 .putLong(Constants.EXPIRES_AT, expiresAt)
                 .putString(Constants.USER_ID, uri.getQueryParameter(Constants.USER_ID))
                 .apply();
-        router.navigateToMainFragment();
+        router.navigateToMainActivity();
     }
 
     public void authorize() {

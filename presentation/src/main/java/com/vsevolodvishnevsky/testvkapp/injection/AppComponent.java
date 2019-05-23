@@ -1,7 +1,7 @@
 package com.vsevolodvishnevsky.testvkapp.injection;
 
-import com.vsevolodvishnevsky.testvkapp.screens.fragments.authorization.AuthorizationViewModel;
-import com.vsevolodvishnevsky.testvkapp.screens.fragments.main.MainViewModel;
+import com.vsevolodvishnevsky.testvkapp.screens.activity.auth.AuthorizationViewModel;
+import com.vsevolodvishnevsky.testvkapp.screens.activity.main.MainViewModel;
 
 import javax.inject.Singleton;
 

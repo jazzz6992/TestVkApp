@@ -1,4 +1,4 @@
-package com.vsevolodvishnevsky.testvkapp.screens.activity;
+package com.vsevolodvishnevsky.testvkapp.screens.activity.start;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,27 +7,26 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.vsevolodvishnevsky.domain.constants.Constants;
 import com.vsevolodvishnevsky.testvkapp.R;
-import com.vsevolodvishnevsky.testvkapp.screens.routers.MainRouter;
 import com.vsevolodvishnevsky.testvkapp.util.TokenValidator;
 
 
-public class MainActivity extends AppCompatActivity {
+public class StartActivity extends AppCompatActivity {
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        MainRouter router = new MainRouter(this);
+        setContentView(R.layout.activity_start);
+        StartRouter router = new StartRouter(this);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (sharedPreferences.getString(Constants.ACCESS_TOKEN, null) != null) {
             if (TokenValidator.isTokenValid(sharedPreferences)) {
-                router.navigateToMainFragment();
+                router.navigateToMainActivity();
             } else {
-                router.navigateToAuthorizationFragment(false);
+                router.navigateToAuthorizationActivity(false);
             }
         } else {
-            router.navigateToAuthorizationFragment(true);
+            router.navigateToAuthorizationActivity(true);
         }
     }
 }

@@ -3,17 +3,12 @@ package com.vsevolodvishnevsky.testvkapp.base;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.v7.app.AppCompatActivity;
 
 import com.vsevolodvishnevsky.testvkapp.BR;
 
-public abstract class BaseMVVMFragment<Binding extends ViewDataBinding, ViewModel extends BaseViewModel, R extends BaseRouter> extends Fragment {
-
+public abstract class BaseMVVMActivity<Binding extends ViewDataBinding, ViewModel extends BaseViewModel, R extends BaseRouter> extends AppCompatActivity {
     protected Binding binding;
     protected ViewModel viewModel;
 
@@ -23,14 +18,13 @@ public abstract class BaseMVVMFragment<Binding extends ViewDataBinding, ViewMode
 
     public abstract R provideRouter();
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, provideLayoutId(), container, false);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = DataBindingUtil.setContentView(this, provideLayoutId());
         viewModel = provideViewModel();
         viewModel.attachRouter(provideRouter());
         binding.setVariable(BR.viewModel, viewModel);
-        return binding.getRoot();
     }
 
     @Override

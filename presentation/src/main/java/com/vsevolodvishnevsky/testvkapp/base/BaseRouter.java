@@ -1,16 +1,16 @@
 package com.vsevolodvishnevsky.testvkapp.base;
 
 
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 
 public abstract class BaseRouter {
-    private FragmentActivity activity;
+    private AppCompatActivity activity;
 
-    public BaseRouter(FragmentActivity activity) {
+    public BaseRouter(AppCompatActivity activity) {
         this.activity = activity;
     }
 
-    public FragmentActivity getActivity() {
+    public AppCompatActivity getActivity() {
         return activity;
     }
 

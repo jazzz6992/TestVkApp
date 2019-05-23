@@ -1,4 +1,4 @@
-package com.vsevolodvishnevsky.testvkapp.screens.fragments.main;
+package com.vsevolodvishnevsky.testvkapp.screens.activity.main;
 
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;

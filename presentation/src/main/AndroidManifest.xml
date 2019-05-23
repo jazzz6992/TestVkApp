@@ -14,7 +14,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".screens.activity.MainActivity">
+        <activity android:name=".screens.activity.main.MainActivity"></activity>
+        <activity
+            android:name=".screens.activity.auth.AuthActivity"
+            android:noHistory="true"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity
+            android:name=".screens.activity.start.StartActivity"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

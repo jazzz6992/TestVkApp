@@ -8,4 +8,5 @@ public class Constants {
     public static final String LOG_TAG = "log_tag";
     public static final String ERROR = "error";
     public static final String CANCEL = "cancel";
+    public static final CharSequence LOGOUT = "logout";
 }

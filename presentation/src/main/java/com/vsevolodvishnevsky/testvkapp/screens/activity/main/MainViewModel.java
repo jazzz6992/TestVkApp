@@ -1,4 +1,4 @@
-package com.vsevolodvishnevsky.testvkapp.screens.fragments.main;
+package com.vsevolodvishnevsky.testvkapp.screens.activity.main;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -14,7 +14,6 @@ import com.vsevolodvishnevsky.domain.repository.DataRepository;
 import com.vsevolodvishnevsky.testvkapp.R;
 import com.vsevolodvishnevsky.testvkapp.app.App;
 import com.vsevolodvishnevsky.testvkapp.base.BaseViewModel;
-import com.vsevolodvishnevsky.testvkapp.screens.routers.MainRouter;
 import com.vsevolodvishnevsky.testvkapp.util.TokenValidator;
 
 import java.io.IOException;
@@ -43,7 +42,7 @@ public class MainViewModel extends BaseViewModel<MainRouter> {
             getUserInfo();
             getFriends();
         } else {
-            router.navigateToAuthorizationFragment(false);
+            router.navigateToAuthorizationActivity(false);
         }
     }
 
