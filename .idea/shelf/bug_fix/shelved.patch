@@ -1,0 +1,260 @@
+Index: presentation/src/main/res/layout/activity_auth.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<layout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\">\n\n    <data>\n\n        <import type=\"android.view.View\" />\n\n        <variable\n            name=\"viewModel\"\n            type=\"com.vsevolodvishnevsky.testvkapp.screens.activity.auth.AuthorizationViewModel\" />\n    </data>\n\n    <android.support.constraint.ConstraintLayout\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"match_parent\"\n        tools:context=\".screens.activity.auth.AuthActivity\">\n\n        <Button\n            android:id=\"@+id/auth_button\"\n            android:layout_width=\"wrap_content\"\n            android:layout_height=\"wrap_content\"\n            android:onClick=\"@{() -> viewModel.authorize()}\"\n            android:text=\"@string/authorize\"\n            android:visibility=\"@{viewModel.isAuthorizationInProgress ? View.GONE : View.VISIBLE}\"\n            app:layout_constraintBottom_toBottomOf=\"parent\"\n            app:layout_constraintEnd_toEndOf=\"parent\"\n            app:layout_constraintStart_toStartOf=\"parent\"\n            app:layout_constraintTop_toTopOf=\"parent\"\n            app:layout_constraintVertical_bias=\"0.92\" />\n\n        <WebView\n            android:id=\"@+id/web_view\"\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"match_parent\"\n            android:visibility=\"@{viewModel.isAuthorizationInProgress ? View.VISIBLE : View.GONE}\"\n            app:init=\"@{viewModel.webViewClient}\"\n            app:layout_constraintBottom_toBottomOf=\"parent\"\n            app:layout_constraintEnd_toEndOf=\"parent\"\n            app:layout_constraintStart_toStartOf=\"parent\"\n            app:layout_constraintTop_toTopOf=\"parent\"\n            app:load_url=\"@{viewModel.observableUrl}\" />\n\n\n    </android.support.constraint.ConstraintLayout>\n</layout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- presentation/src/main/res/layout/activity_auth.xml	(date 1558607253000)
++++ presentation/src/main/res/layout/activity_auth.xml	(date 1558609936000)
+@@ -21,7 +21,6 @@
+             android:id="@+id/auth_button"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+-            android:onClick="@{() -> viewModel.authorize()}"
+             android:text="@string/authorize"
+             android:visibility="@{viewModel.isAuthorizationInProgress ? View.GONE : View.VISIBLE}"
+             app:layout_constraintBottom_toBottomOf="parent"
+@@ -35,12 +34,10 @@
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:visibility="@{viewModel.isAuthorizationInProgress ? View.VISIBLE : View.GONE}"
+-            app:init="@{viewModel.webViewClient}"
+             app:layout_constraintBottom_toBottomOf="parent"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+-            app:layout_constraintTop_toTopOf="parent"
+-            app:load_url="@{viewModel.observableUrl}" />
++            app:layout_constraintTop_toTopOf="parent" />
+ 
+ 
+     </android.support.constraint.ConstraintLayout>
+Index: presentation/src/main/java/com/vsevolodvishnevsky/testvkapp/screens/activity/auth/AuthActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.vsevolodvishnevsky.testvkapp.screens.activity.auth;\n\nimport android.arch.lifecycle.ViewModelProviders;\nimport android.content.Context;\nimport android.content.Intent;\nimport android.os.Bundle;\n\nimport com.vsevolodvishnevsky.testvkapp.R;\nimport com.vsevolodvishnevsky.testvkapp.base.BaseMVVMActivity;\nimport com.vsevolodvishnevsky.testvkapp.databinding.ActivityAuthBinding;\n\npublic class AuthActivity extends BaseMVVMActivity<ActivityAuthBinding, AuthorizationViewModel, AuthRouter> {\n\n    public static final String IS_FIRST_AUTHORIZATION_KEY = \"isFirstAuthorization\";\n\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        boolean isFirstAuthorization = getIntent().getBooleanExtra(IS_FIRST_AUTHORIZATION_KEY, false);\n        if (!isFirstAuthorization) {\n            viewModel.authorize();\n        }\n    }\n\n    public static Intent createIntent(Context context, boolean isFirstAuthorization) {\n        Intent intent = new Intent(context, AuthActivity.class);\n        intent.putExtra(IS_FIRST_AUTHORIZATION_KEY, isFirstAuthorization);\n        return intent;\n    }\n\n    @Override\n    public int provideLayoutId() {\n        return R.layout.activity_auth;\n    }\n\n    @Override\n    public AuthorizationViewModel provideViewModel() {\n        return ViewModelProviders.of(this).get(AuthorizationViewModel.class);\n    }\n\n    @Override\n    public AuthRouter provideRouter() {\n        return new AuthRouter(this);\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- presentation/src/main/java/com/vsevolodvishnevsky/testvkapp/screens/activity/auth/AuthActivity.java	(date 1558607253000)
++++ presentation/src/main/java/com/vsevolodvishnevsky/testvkapp/screens/activity/auth/AuthActivity.java	(date 1558610221000)
+@@ -1,10 +1,18 @@
+ package com.vsevolodvishnevsky.testvkapp.screens.activity.auth;
+ 
++import android.annotation.TargetApi;
+ import android.arch.lifecycle.ViewModelProviders;
+ import android.content.Context;
+ import android.content.Intent;
++import android.content.res.Resources;
++import android.net.Uri;
++import android.os.Build;
+ import android.os.Bundle;
++import android.webkit.WebResourceRequest;
++import android.webkit.WebView;
++import android.webkit.WebViewClient;
+ 
++import com.vsevolodvishnevsky.domain.constants.Constants;
+ import com.vsevolodvishnevsky.testvkapp.R;
+ import com.vsevolodvishnevsky.testvkapp.base.BaseMVVMActivity;
+ import com.vsevolodvishnevsky.testvkapp.databinding.ActivityAuthBinding;
+@@ -12,13 +20,48 @@
+ public class AuthActivity extends BaseMVVMActivity<ActivityAuthBinding, AuthorizationViewModel, AuthRouter> {
+ 
+     public static final String IS_FIRST_AUTHORIZATION_KEY = "isFirstAuthorization";
++    private static final String WEB_VIEW_STATE_KEY = "webViewState";
++    private static final String IS_AUTH_IN_PROGRESS_KEY = "isAuthInProgress";
+ 
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         boolean isFirstAuthorization = getIntent().getBooleanExtra(IS_FIRST_AUTHORIZATION_KEY, false);
++        binding.webView.setWebViewClient(new WebViewClient() {
++
++            @TargetApi(Build.VERSION_CODES.N)
++            @Override
++            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
++                return shouldOverrideUrlLoading(view, request.getUrl().toString());
++
++            }
++
++            @Override
++            public boolean shouldOverrideUrlLoading(WebView view, String url) {
++                if (url.contains(Constants.ERROR) || url.contains(Constants.CANCEL)) {
++                    viewModel.getIsAuthorizationInProgress().set(false);
++                    return true;
++                } else if (url.contains(Constants.LOGOUT)) {
++                    viewModel.getIsAuthorizationInProgress().set(false);
++                    return false;
++                } else if (url.startsWith(getResources().getString(R.string.redirect_url))) {
++                    viewModel.saveAuthorizationData(url);
++                    return true;
++                }
++                return false;
++            }
++        });
++        binding.webView.getSettings().setJavaScriptEnabled(true);
++        binding.authButton.setOnClickListener(v -> authorize());
++        if (savedInstanceState != null) {
++            Bundle webViewState = savedInstanceState.getBundle(WEB_VIEW_STATE_KEY);
++            if (webViewState != null) {
++                binding.webView.restoreState(webViewState);
++            }
++            viewModel.getIsAuthorizationInProgress().set(savedInstanceState.getBoolean(IS_AUTH_IN_PROGRESS_KEY));
++        }
+         if (!isFirstAuthorization) {
+-            viewModel.authorize();
++            authorize();
+         }
+     }
+ 
+@@ -42,4 +85,33 @@
+     public AuthRouter provideRouter() {
+         return new AuthRouter(this);
+     }
++
++    public void authorize() {
++        Resources resources = getResources();
++        String url = Uri.parse(resources.getString(R.string.authorization_url))
++                .buildUpon()
++                .appendQueryParameter("client_id", String.valueOf(resources.getInteger(R.integer.appId)))
++                .appendQueryParameter("redirect_uri", resources.getString(R.string.redirect_url))
++                .appendQueryParameter("display", resources.getString(R.string.display))
++                .appendQueryParameter("scope", resources.getString(R.string.scope))
++                .appendQueryParameter("response_type", resources.getString(R.string.response_type))
++                .appendQueryParameter("v", resources.getString(R.string.version))
++                .build().toString();
++        binding.webView.loadUrl(url);
++        viewModel.getIsAuthorizationInProgress().set(true);
++    }
++
++    @Override
++    protected void onSaveInstanceState(Bundle outState) {
++        super.onSaveInstanceState(outState);
++        Bundle bundle = new Bundle();
++        binding.webView.saveState(bundle);
++        outState.putBundle(WEB_VIEW_STATE_KEY, bundle);
++        outState.putBoolean(IS_AUTH_IN_PROGRESS_KEY, viewModel.getIsAuthorizationInProgress().get());
++    }
++
++    @Override
++    protected void onDestroy() {
++        super.onDestroy();
++    }
+ }
+Index: presentation/src/main/java/com/vsevolodvishnevsky/testvkapp/screens/activity/auth/AuthorizationViewModel.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.vsevolodvishnevsky.testvkapp.screens.activity.auth;\n\nimport android.annotation.SuppressLint;\nimport android.annotation.TargetApi;\nimport android.content.Context;\nimport android.content.SharedPreferences;\nimport android.content.res.Resources;\nimport android.databinding.ObservableBoolean;\nimport android.databinding.ObservableField;\nimport android.net.Uri;\nimport android.os.Build;\nimport android.preference.PreferenceManager;\nimport android.webkit.WebResourceRequest;\nimport android.webkit.WebView;\nimport android.webkit.WebViewClient;\n\nimport com.vsevolodvishnevsky.domain.constants.Constants;\nimport com.vsevolodvishnevsky.testvkapp.R;\nimport com.vsevolodvishnevsky.testvkapp.app.App;\nimport com.vsevolodvishnevsky.testvkapp.base.BaseViewModel;\n\nimport java.util.Date;\n\nimport javax.inject.Inject;\n\npublic class AuthorizationViewModel extends BaseViewModel<AuthRouter> {\n\n\n    @SuppressLint(\"StaticFieldLeak\")\n    @Inject\n    public Context context;\n\n    public AuthorizationViewModel() {\n        System.out.println();\n    }\n\n    private ObservableField<String> observableUrl = new ObservableField<>();\n    private final ObservableBoolean isAuthorizationInProgress = new ObservableBoolean(false);\n    private WebViewClient webViewClient = new WebViewClient() {\n\n        @TargetApi(Build.VERSION_CODES.N)\n        @Override\n        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {\n            return shouldOverrideUrlLoading(view, request.getUrl().toString());\n\n        }\n\n        @Override\n        public boolean shouldOverrideUrlLoading(WebView view, String url) {\n            if (url.contains(Constants.ERROR) || url.contains(Constants.CANCEL)) {\n                isAuthorizationInProgress.set(false);\n                return true;\n            } else if (url.contains(Constants.LOGOUT)) {\n                isAuthorizationInProgress.set(false);\n                return false;\n            } else if (url.startsWith(context.getResources().getString(R.string.redirect_url))) {\n                saveAuthorizationData(url);\n                return true;\n            }\n            return false;\n        }\n    };\n\n    @Override\n    public void createInject() {\n        App.getAppComponent().inject(this);\n    }\n\n    public ObservableField<String> getObservableUrl() {\n        return observableUrl;\n    }\n\n    public WebViewClient getWebViewClient() {\n        return webViewClient;\n    }\n\n    public ObservableBoolean getIsAuthorizationInProgress() {\n        return isAuthorizationInProgress;\n    }\n\n    private void saveAuthorizationData(String url) {\n        Uri uri = Uri.parse(url.replace(\"#\", \"?\"));\n        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);\n        long expiresAt = Long.valueOf(uri.getQueryParameter(Constants.EXPIRES_IN)) * 1000 + new Date().getTime();\n\n        preferences.edit()\n                .putString(Constants.ACCESS_TOKEN, uri.getQueryParameter(Constants.ACCESS_TOKEN))\n                .putLong(Constants.EXPIRES_AT, expiresAt)\n                .putString(Constants.USER_ID, uri.getQueryParameter(Constants.USER_ID))\n                .apply();\n        router.navigateToMainActivity();\n    }\n\n    public void authorize() {\n        Resources resources = context.getResources();\n        String url = Uri.parse(resources.getString(R.string.authorization_url))\n                .buildUpon()\n                .appendQueryParameter(\"client_id\", String.valueOf(resources.getInteger(R.integer.appId)))\n                .appendQueryParameter(\"redirect_uri\", resources.getString(R.string.redirect_url))\n                .appendQueryParameter(\"display\", resources.getString(R.string.display))\n                .appendQueryParameter(\"scope\", resources.getString(R.string.scope))\n                .appendQueryParameter(\"response_type\", resources.getString(R.string.response_type))\n                .appendQueryParameter(\"v\", resources.getString(R.string.version))\n                .build().toString();\n        observableUrl.set(url);\n        isAuthorizationInProgress.set(true);\n    }\n\n    @Override\n    protected void onCleared() {\n        context = null;\n        super.onCleared();\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- presentation/src/main/java/com/vsevolodvishnevsky/testvkapp/screens/activity/auth/AuthorizationViewModel.java	(date 1558607253000)
++++ presentation/src/main/java/com/vsevolodvishnevsky/testvkapp/screens/activity/auth/AuthorizationViewModel.java	(date 1558609262000)
+@@ -34,51 +34,18 @@
+         System.out.println();
+     }
+ 
+-    private ObservableField<String> observableUrl = new ObservableField<>();
+     private final ObservableBoolean isAuthorizationInProgress = new ObservableBoolean(false);
+-    private WebViewClient webViewClient = new WebViewClient() {
+-
+-        @TargetApi(Build.VERSION_CODES.N)
+-        @Override
+-        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+-            return shouldOverrideUrlLoading(view, request.getUrl().toString());
+-
+-        }
+-
+-        @Override
+-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+-            if (url.contains(Constants.ERROR) || url.contains(Constants.CANCEL)) {
+-                isAuthorizationInProgress.set(false);
+-                return true;
+-            } else if (url.contains(Constants.LOGOUT)) {
+-                isAuthorizationInProgress.set(false);
+-                return false;
+-            } else if (url.startsWith(context.getResources().getString(R.string.redirect_url))) {
+-                saveAuthorizationData(url);
+-                return true;
+-            }
+-            return false;
+-        }
+-    };
+ 
+     @Override
+     public void createInject() {
+         App.getAppComponent().inject(this);
+     }
+ 
+-    public ObservableField<String> getObservableUrl() {
+-        return observableUrl;
+-    }
+-
+-    public WebViewClient getWebViewClient() {
+-        return webViewClient;
+-    }
+-
+     public ObservableBoolean getIsAuthorizationInProgress() {
+         return isAuthorizationInProgress;
+     }
+ 
+-    private void saveAuthorizationData(String url) {
++    public void saveAuthorizationData(String url) {
+         Uri uri = Uri.parse(url.replace("#", "?"));
+         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+         long expiresAt = Long.valueOf(uri.getQueryParameter(Constants.EXPIRES_IN)) * 1000 + new Date().getTime();
+@@ -91,21 +58,6 @@
+         router.navigateToMainActivity();
+     }
+ 
+-    public void authorize() {
+-        Resources resources = context.getResources();
+-        String url = Uri.parse(resources.getString(R.string.authorization_url))
+-                .buildUpon()
+-                .appendQueryParameter("client_id", String.valueOf(resources.getInteger(R.integer.appId)))
+-                .appendQueryParameter("redirect_uri", resources.getString(R.string.redirect_url))
+-                .appendQueryParameter("display", resources.getString(R.string.display))
+-                .appendQueryParameter("scope", resources.getString(R.string.scope))
+-                .appendQueryParameter("response_type", resources.getString(R.string.response_type))
+-                .appendQueryParameter("v", resources.getString(R.string.version))
+-                .build().toString();
+-        observableUrl.set(url);
+-        isAuthorizationInProgress.set(true);
+-    }
+-
+     @Override
+     protected void onCleared() {
+         context = null;
+Index: presentation/src/main/java/com/vsevolodvishnevsky/testvkapp/binding/BindingAdapters.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.vsevolodvishnevsky.testvkapp.binding;\n\nimport android.databinding.BindingAdapter;\nimport android.support.v7.widget.RecyclerView;\nimport android.webkit.WebView;\nimport android.webkit.WebViewClient;\n\npublic class BindingAdapters {\n\n    @BindingAdapter(\"adapter\")\n    public static void initRecyclerView(RecyclerView recyclerView, RecyclerView.Adapter adapter) {\n        recyclerView.setAdapter(adapter);\n    }\n\n    @BindingAdapter(\"load_url\")\n    public static void loadUrl(WebView webView, String url) {\n        if (url != null) {\n            webView.loadUrl(url);\n        }\n    }\n\n    @BindingAdapter(\"init\")\n    public static void init(WebView webView, WebViewClient webViewClient) {\n        webView.setWebViewClient(webViewClient);\n        webView.getSettings().setJavaScriptEnabled(true);\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- presentation/src/main/java/com/vsevolodvishnevsky/testvkapp/binding/BindingAdapters.java	(date 1558607253000)
++++ presentation/src/main/java/com/vsevolodvishnevsky/testvkapp/binding/BindingAdapters.java	(date 1558610072000)
+@@ -22,6 +22,5 @@
+     @BindingAdapter("init")
+     public static void init(WebView webView, WebViewClient webViewClient) {
+         webView.setWebViewClient(webViewClient);
+-        webView.getSettings().setJavaScriptEnabled(true);
+     }
+ }
+Index: presentation/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    package=\"com.vsevolodvishnevsky.testvkapp\">\n\n    <uses-permission android:name=\"android.permission.INTERNET\" />\n\n    <application\n        android:name=\".app.App\"\n        android:allowBackup=\"true\"\n        android:icon=\"@mipmap/ic_launcher\"\n        android:label=\"@string/app_name\"\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\n        android:supportsRtl=\"true\"\n        android:theme=\"@style/AppTheme\"\n        tools:ignore=\"GoogleAppIndexingWarning\">\n        <activity android:name=\".screens.activity.main.MainActivity\"></activity>\n        <activity\n            android:name=\".screens.activity.auth.AuthActivity\"\n            android:noHistory=\"true\"\n            android:configChanges=\"keyboardHidden|orientation|screenSize\"/>\n        <activity\n            android:name=\".screens.activity.start.StartActivity\"\n            android:noHistory=\"true\">\n            <intent-filter>\n                <action android:name=\"android.intent.action.MAIN\" />\n\n                <category android:name=\"android.intent.category.LAUNCHER\" />\n            </intent-filter>\n        </activity>\n    </application>\n\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- presentation/src/main/AndroidManifest.xml	(date 1558607253000)
++++ presentation/src/main/AndroidManifest.xml	(date 1558610313000)
+@@ -17,7 +17,6 @@
+         <activity android:name=".screens.activity.main.MainActivity"></activity>
+         <activity
+             android:name=".screens.activity.auth.AuthActivity"
+-            android:noHistory="true"
+             android:configChanges="keyboardHidden|orientation|screenSize"/>
+         <activity
+             android:name=".screens.activity.start.StartActivity"
